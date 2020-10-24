@@ -1,7 +1,8 @@
 package com.sparta.svilen;
 
-public class Main
-{
+import com.sparta.svilen.Controller.Starter;
+
+public class Main {
     public static void main( String[] args ) {
         Starter.start();
     }
