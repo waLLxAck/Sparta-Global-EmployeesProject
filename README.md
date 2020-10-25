@@ -15,45 +15,49 @@
 
 ## Introduction
 
-Employee Project consists of a database link, threading, reading/writing to a file, . It encompasses concepts such as:
+Employee Project is a product that allow for the import of CSV files to a MySQL database. Through the use of threading and batch execution, it is capable of quick imports. It encompasses concepts such as: database link, threading, reading/writing to a file, logging, DTO, DAO, functional programming.
 
-- Exceptions
+- Database
 
-    Both from `java.lang` and two custom built ones
+    MySQL database.
 
-- Interfaces
+- Threading
 
-    In our case two interfaces are used: `Sorter` and `BinaryTree`
+    Allowed for the **persistence** of data to occur in *~4.5 seconds* from *~370 seconds*. The number of threads can be adjusted in the setup screen.
 
-- Industry level design
+- Reading/Writing
 
-    The project aims to follow **SOLID** design principles
+    Making use of the `BufferedReader` in combination with `FileReader`.
 
-- The four pillars of OOP
+- Logging
 
-    Abstraction, Inheritance, Encapsulation, Polymorphism
+    Duplicate records are stored into an external file to be manually reviewed.
 
-- Nested Classes
+- Data transfer object (DTO)
 
-    The `Node` class inside the binary tree.
+    Used to reduce the number of calls to the database. It is present as the Employee class.
 
-It also makes use of **Maven** as the dependency management and build tool, **JUnit-Jupiter** for unit testing, **log4j2** for logging throughout the program.
+- Data access object (DAO)
 
-It's main focus is around sorting algorithms and in particular:
+    Provides CRUD operations without exposing details about the database.
 
-1. Bubble sort
-2. Merge sort
-3. Tree sort
-
-Another thing that is explored is how each algorithm performs next to each other. Performance tests happen withing the testing section of the solution.
+The project makes use of **Maven** as the dependency management and build tool, **JUnit-Jupiter** for unit testing, **log4j2** for logging throughout the program, **mysql-connector** to establish a database link.
 
 ## Built with
 
-The project was built entirely using [IntelliJ](https://www.jetbrains.com/idea/). 
+The project was built with [IntelliJ](https://www.jetbrains.com/idea/).
+
+The database designed to work with the product is [MySQL](https://www.mysql.com/).
 
 ## Getting started
 
-You need to have downloaded IntelliJ on your computer, either the [community version](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC) or the [ultimate](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows) one.
+You need to have downloaded and installed:
+ 
+1. IntelliJ, either the [community version](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC) or the [ultimate](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows) one.
+
+2. [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+
+3. [MySQL Server](https://dev.mysql.com/downloads/windows/installer/8.0.html)
 
 Then you need to clone the repo. For windows users, run the following command in Git:
 
@@ -61,11 +65,29 @@ Then you need to clone the repo. For windows users, run the following command in
 
 *Note: You can use IntelliJ for cloning, too.*
 
-Once you've done that, all you have to do is open up the project in the IntelliJ.
+Once you've done that, you have to open up the project in the IntelliJ and create a `database.properties` file inside the *resources* folder with the following information:
+
+*Please change database settings accordingly.*
+
+`url = jdbc:mysql://localhost:3306/dbEmployees?serverTimezone=GMT` 
+
+`username = root`
+
+`password = *ENTER PASSWORD*`
+
+dbEmployees - this is the name of the database
+
+GMT - this is your time zone
+
+root - default username
+
+password - provide the password you used in the MySQL server installation
 
 ## Usage
 
-You can use the system to either learn from the design and/or coding or to sort custom and pre-existing ones. 
+This project can be used to efficiently persist CSV files to a database.
+
+*Warning: For any alterations of the provided Employee format, DTO must be changed.* 
 
 ## Contributions
 

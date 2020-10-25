@@ -1,2 +1,3 @@
 # Project exclude paths
 resources/database.properties
+resources/logFile.txt
