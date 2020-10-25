@@ -53,13 +53,13 @@ public class DatabaseDAO {
             for (Thread thread : threads) {
                 thread.join();
             }
-            print("Total time taken to add records: " + (System.nanoTime() - start)/1000000);
+            print("Total time taken to add records: " + (System.nanoTime() - start)/1000000 + "ms.");
         } catch (SQLException | InterruptedException throwables) {
             throwables.printStackTrace();
         } finally {
             closeConnection();
         }
-        Logger.logDuplicates(employeeDuplicateRecords); //FIXME: Doesn't record the records
+        Logger.logDuplicates(employeeDuplicateRecords);
     }
 
     private void getConnection() {
