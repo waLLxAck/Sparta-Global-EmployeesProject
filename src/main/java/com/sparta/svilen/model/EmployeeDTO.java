@@ -1,4 +1,4 @@
-package com.sparta.svilen.Model;
+package com.sparta.svilen.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

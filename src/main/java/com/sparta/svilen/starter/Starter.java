@@ -1,6 +1,6 @@
-package com.sparta.svilen.Starter;
+package com.sparta.svilen.starter;
 
-import com.sparta.svilen.DataAccess.DatabaseDAO;
+import com.sparta.svilen.database.DatabaseDAO;
 
 public class Starter {
     public static void start() {

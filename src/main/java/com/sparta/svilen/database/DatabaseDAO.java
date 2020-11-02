@@ -1,8 +1,8 @@
-package com.sparta.svilen.DataAccess;
+package com.sparta.svilen.database;
 
-import com.sparta.svilen.Model.EmployeeDTO;
-import com.sparta.svilen.Utility.Printer;
-import com.sparta.svilen.View.Logger;
+import com.sparta.svilen.model.EmployeeDTO;
+import com.sparta.svilen.utility.Printer;
+import com.sparta.svilen.utility.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

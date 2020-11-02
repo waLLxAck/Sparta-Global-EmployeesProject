@@ -1,7 +1,7 @@
-package com.sparta.svilen.View;
+package com.sparta.svilen.utility;
 
-import com.sparta.svilen.Model.EmployeeDTO;
-import com.sparta.svilen.DataAccess.DatabaseDAO;
+import com.sparta.svilen.model.EmployeeDTO;
+import com.sparta.svilen.database.DatabaseDAO;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.HashMap;

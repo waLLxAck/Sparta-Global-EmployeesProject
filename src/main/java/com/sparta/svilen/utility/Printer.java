@@ -1,4 +1,4 @@
-package com.sparta.svilen.Utility;
+package com.sparta.svilen.utility;
 
 public class Printer {
     public static void print(Object object) {

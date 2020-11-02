@@ -1,6 +1,6 @@
 package com.sparta.svilen;
 
-import com.sparta.svilen.DataAccess.DatabaseDAO;
+import com.sparta.svilen.database.DatabaseDAO;
 import org.junit.jupiter.api.Test;
 
 public class PerformanceTesting {
