@@ -72,8 +72,8 @@ public class DatabaseDAO {
         try {
             dbProperties.load(new FileReader("resources/database.properties"));
             connection = DriverManager.getConnection(dbProperties.getProperty("url"), dbProperties.getProperty("username"), dbProperties.getProperty("password"));
-        } catch (SQLException | IOException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
     }
 

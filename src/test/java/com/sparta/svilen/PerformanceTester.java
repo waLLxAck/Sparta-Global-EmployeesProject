@@ -3,7 +3,7 @@ package com.sparta.svilen;
 import com.sparta.svilen.database.DatabaseDAO;
 import org.junit.jupiter.api.Test;
 
-public class PerformanceTesting {
+public class PerformanceTester {
 
     @Test
     //65,000 records
