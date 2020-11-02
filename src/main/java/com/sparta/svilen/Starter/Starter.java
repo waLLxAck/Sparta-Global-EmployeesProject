@@ -1,6 +1,6 @@
-package com.sparta.svilen.Controller;
+package com.sparta.svilen.Starter;
 
-import com.sparta.svilen.DataAccessLayer.DatabaseDAO;
+import com.sparta.svilen.DataAccess.DatabaseDAO;
 
 public class Starter {
     public static void start() {

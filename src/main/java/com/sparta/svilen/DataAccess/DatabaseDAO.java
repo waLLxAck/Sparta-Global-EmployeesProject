@@ -1,6 +1,7 @@
-package com.sparta.svilen.DataAccessLayer;
+package com.sparta.svilen.DataAccess;
 
 import com.sparta.svilen.Model.EmployeeDTO;
+import com.sparta.svilen.Utility.Printer;
 import com.sparta.svilen.View.Logger;
 
 import java.io.BufferedReader;
@@ -15,45 +16,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import static com.sparta.svilen.Helpers.Printer.print;
-
 public class DatabaseDAO {
     private PreparedStatement preparedStatement;
     private final Properties dbProperties = new Properties();
-    private Connection connection;
+    public Connection connection;
     private final HashMap<Integer, EmployeeDTO> employeeRecords = new HashMap<>();
     private final HashMap<Integer, EmployeeDTO> employeeDuplicateRecords = new HashMap<>();
     private HashMap<Integer, EmployeeDTO> employeeRecordsDummy = new HashMap<>();
     private final List<Thread> threads = new ArrayList<>();
 
     //Settings
-    public static final boolean DROP_TABLE_AND_CREATE_TABLE = true;
+    public static final boolean DROP_TABLE_AND_CREATE_TABLE_ENABLED = true;
     private static final int PREPARED_STATEMENT_BATCH_SIZE = 250;
-    public static final int NUMBER_OF_THREADS = 5;
+    public static final int NUMBER_OF_THREADS = 10;
 
     private static int HASHMAP_SPLIT_THRESHOLD;
 
-    public DatabaseDAO() {
-    }
-
     public void start(String fileName) {
         getConnection();
-        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + fileName + ".csv"))) {
-            HASHMAP_SPLIT_THRESHOLD = ((int) csvReader.lines().count())/NUMBER_OF_THREADS;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setHashMapSplitThreshold(fileName);
         try {
-            if (DROP_TABLE_AND_CREATE_TABLE) {
-                dropTableEmployee();
-                createTableEmployee();
+            if (DROP_TABLE_AND_CREATE_TABLE_ENABLED) {
+                dropTableEmployees();
+                createTableEmployees();
             }
+
             long start = System.nanoTime();
             insertEmployeesFromFile(fileName);
-            for (Thread thread : threads) {
-                thread.join();
-            }
-            print("Total time taken to add records: " + (System.nanoTime() - start)/1000000 + "ms.");
+            joinThreads();
+            Printer.printTimeTaken(start);
+
         } catch (SQLException | InterruptedException throwables) {
             throwables.printStackTrace();
         } finally {
@@ -62,7 +54,21 @@ public class DatabaseDAO {
         Logger.logDuplicates(employeeDuplicateRecords);
     }
 
-    private void getConnection() {
+    private void joinThreads() throws InterruptedException {
+        for (Thread thread : threads) {
+            thread.join();
+        }
+    }
+
+    private void setHashMapSplitThreshold(String fileName) {
+        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + fileName + ".csv"))) {
+            HASHMAP_SPLIT_THRESHOLD = ((int) csvReader.lines().count())/NUMBER_OF_THREADS;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getConnection() {
         try {
             dbProperties.load(new FileReader("resources/database.properties"));
             connection = DriverManager.getConnection(dbProperties.getProperty("url"), dbProperties.getProperty("username"), dbProperties.getProperty("password"));
@@ -71,13 +77,13 @@ public class DatabaseDAO {
         }
     }
 
-    public void dropTableEmployee() throws SQLException {
+    public void dropTableEmployees() throws SQLException {
         String queryDropEmployee = "DROP TABLE IF EXISTS Employees;";
         preparedStatement = connection.prepareStatement(queryDropEmployee);
         preparedStatement.executeUpdate();
     }
 
-    private void createTableEmployee() throws SQLException {
+    private void createTableEmployees() throws SQLException {
         String queryCreateTableEmployee = "CREATE TABLE Employees (\n" +
                 "employee_id INT PRIMARY KEY,\n" +
                 "name_prefix VARCHAR(6),\n" +
@@ -100,29 +106,35 @@ public class DatabaseDAO {
         try {
             getConnection();
             connection.setAutoCommit(false);
+
             String queryInsertEmployee = "INSERT INTO `dbemployees`.`employees` (`employee_id`, `name_prefix`, " +
                     "`first_name`, `middle_initial`, `last_name`, `gender`, `email`, `dob`,`date_joined`, `salary`) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             preparedStatement = connection.prepareStatement(queryInsertEmployee);
-            for (EmployeeDTO e : employees.values()) {
-                preparedStatementAssignParameters(e);
+
+            for (EmployeeDTO employee : employees.values()) {
+                preparedStatementAssignParameters(employee);
                 counter++;
+
+                //Every time the counter reaches the specified batch size, execute batch
                 if (counter % PREPARED_STATEMENT_BATCH_SIZE == 0) {
                     preparedStatement.executeBatch();
                 }
             }
+
+            //Execute batch one last time for the remaining records
             preparedStatement.executeBatch();
             connection.commit();
             closeConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void insertEmployeesFromFile(String employeeRecordsLarge) {
-        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + employeeRecordsLarge + ".csv"))) {
-            csvReader.lines().filter(this::checkRowForId).map(row -> row.split(",")).forEach(entry -> {
-                accept(entry);
+    public void insertEmployeesFromFile(String fileName) {
+        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + fileName + ".csv"))) {
+            csvReader.lines().filter(this::isAnID).map(row -> row.split(",")).forEach(entry -> {
+                addToHashMaps(entry);
                 if (employeeRecords.size() % HASHMAP_SPLIT_THRESHOLD == 0) {
                     createNewThread(employeeRecordsDummy);
                     employeeRecordsDummy = new HashMap<>();
@@ -134,7 +146,7 @@ public class DatabaseDAO {
         }
     }
 
-    private boolean checkRowForId(String row) {
+    private boolean isAnID(String row) {
         return Character.isDigit(row.trim().charAt(0));
     }
 
@@ -160,12 +172,12 @@ public class DatabaseDAO {
     private void closeConnection() {
         try {
             connection.close();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    private void accept(String[] data) {
+    private void addToHashMaps(String[] data) {
         if (employeeRecords.containsKey(Integer.parseInt(data[0]))) {
             addEmployeeToHashMap(data, employeeDuplicateRecords);
         } else {
