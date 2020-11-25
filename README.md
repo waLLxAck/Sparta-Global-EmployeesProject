@@ -6,7 +6,7 @@
 
 ## Table of contents
 
-- Introduction
+- [Introduction](#introduction)
 - Built with
 - Getting started
 - Usage
