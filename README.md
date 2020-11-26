@@ -100,3 +100,10 @@ This project can be used to efficiently persist CSV files to a database.
 
 *Warning: For any alterations of the provided Employee format, DTO must be changed.* 
 
+## Future work
+
+### Add dynamic CSV compatibility
+
+- When a new CSV file is placed in the file directory read its header
+- Adjust the SQL statements to match the data from the headers
+- Be able to perform data persistance of a non-employee object
