@@ -11,6 +11,7 @@
 - [Built with](#built-with)
 - [Getting started](#getting-started)
 - [Usage](#usage)
+- [Future Work](#future-work)
 
 ## Requirements
 
