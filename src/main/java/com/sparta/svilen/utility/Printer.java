@@ -11,14 +11,14 @@ public class Printer {
 
     public static void displayReportChoice(){
         System.out.println("--------------------------------------------------------------");
-        System.out.println("Please choose a file to be inserted:");
-        System.out.println("Enter 1 for EmployeesRecords");
-        System.out.println("Enter 2 for EmployeesRecordsLarge");
+        System.out.println("Please choose a file to be inserted! (Options listed below)");
+        System.out.print("--------------------------------------------------------------");
+        System.out.println(FileRetriever.getFileString());
         System.out.println("--------------------------------------------------------------");
     }
 
     public static void displayChoicePrompt() {
-        System.out.print("Choice: ");
+        System.out.print("File name: ");
     }
 
     public static void displayError() {

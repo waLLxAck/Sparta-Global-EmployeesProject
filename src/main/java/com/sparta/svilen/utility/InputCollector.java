@@ -1,25 +1,25 @@
 package com.sparta.svilen.utility;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InputCollector {
-    public static int getUserInput() {
+    public static String getUserInput() {
         Scanner scanner = new Scanner(System.in);
-        int input = -1;
+        String input;
         Printer.displayReportChoice();
         Printer.displayChoicePrompt();
         do {
             try {
-                input = scanner.nextInt();
-                if (input < 1 || input > 3) {
-                    throw new InputMismatchException("Invalid input");
-                }
+                input = scanner.nextLine();
                 return input;
-            } catch (InputMismatchException ime) {
-                Printer.displayError();
-                Sleeper.sleep(100);
+            } catch (Exception e) {
+                displayErrorMessage();
             }
         } while (true);
+    }
+
+    private static void displayErrorMessage() {
+        Printer.displayError();
+        Sleeper.sleep(100);
     }
 }

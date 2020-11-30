@@ -8,18 +8,8 @@ public class Starter {
         chooseFile(InputCollector.getUserInput());
     }
 
-    private static void chooseFile(int input) {
+    private static void chooseFile(String input) {
         DatabaseDAO db = new DatabaseDAO();
-
-        switch (input) {
-            case 1:
-                db.start("EmployeeRecords");
-                break;
-            case 2:
-                db.start("EmployeeRecordsLarge");
-                break;
-            default:
-                break;
-        }
+        db.start(input);
     }
 }

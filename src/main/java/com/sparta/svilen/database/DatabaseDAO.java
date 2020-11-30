@@ -61,7 +61,7 @@ public class DatabaseDAO {
     }
 
     private void setHashMapSplitThreshold(String fileName) {
-        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + fileName + ".csv"))) {
+        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/file_records/" + fileName + ".csv"))) {
             HASHMAP_SPLIT_THRESHOLD = ((int) csvReader.lines().count())/NUMBER_OF_THREADS;
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class DatabaseDAO {
     }
 
     public void insertEmployeesFromFile(String fileName) {
-        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/" + fileName + ".csv"))) {
+        try (BufferedReader csvReader = new BufferedReader(new FileReader("resources/file_records/" + fileName + ".csv"))) {
             csvReader.lines().filter(this::isAnID).map(row -> row.split(",")).forEach(entry -> {
                 addToHashMaps(entry);
                 if (employeeRecords.size() % HASHMAP_SPLIT_THRESHOLD == 0) {
