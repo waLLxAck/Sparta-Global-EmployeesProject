@@ -6,12 +6,24 @@
 
 ## Table of contents
 
-- Introduction
-- Built with
-- Getting started
-- Usage
-- Contributions
-- Contact
+- [Requirements](#requirements)
+- [Introduction](#introduction)
+- [Built with](#built-with)
+- [Getting started](#getting-started)
+- [Usage](#usage)
+- [Future Work](#future-work)
+
+## Requirements
+
+Perform data migration from a CSV file to a MySQL database. 
+
+The files provided contain details about Employees. (EmployeeRecords.csv / EmployeeRecordsLarge.csv)
+
+Your program will need to read the data from the CSV file and then import the data into the database. Please note that there may be errors in the CSV file that you need to check for. It is recommend to create some kind of collection to store the invalid employee records, so they can be checked later.
+
+The program needs thorough testing at all points to ensure the data migration has taken place correctly. It should also report on the time takes to read the CSV, populate the database and the overall time for the migration.
+
+Be sure to consider the use of design patterns to follow good clean code standards (DTO, DAO).
 
 ## Introduction
 
@@ -71,7 +83,7 @@ Once you've done that, you have to open up the project in the IntelliJ and creat
 
 `url = jdbc:mysql://localhost:3306/dbEmployees?serverTimezone=GMT` 
 
-`username = root`
+`username = *ENTER USERNAME*`
 
 `password = *ENTER PASSWORD*`
 
@@ -89,21 +101,10 @@ This project can be used to efficiently persist CSV files to a database.
 
 *Warning: For any alterations of the provided Employee format, DTO must be changed.* 
 
-## Contributions
+## Future work
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Add dynamic CSV compatibility
 
-1. Fork the Project
-2. Create your own branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Adding some Amazing Feature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-6. Wait for me to review and merge :)
-
-## Contact
-
-**Name**: Svilen Petrov 
-
-**Website**: [svilenpetrov.com](http://svilenpetrov.com) 
-
-**Email**: svilen.petrov97@gmail.com
+- When a new CSV file is placed in the file directory read its header
+- Adjust the SQL statements to match the data from the headers
+- Be able to perform data persistance of a non-employee object
